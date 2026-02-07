@@ -8,6 +8,7 @@ import { ROOMS, type Room } from "@/lib/rooms";
 import { HeaderBar } from "./HeaderBar";
 import { StatusBar } from "./StatusBar";
 import { RoomIndicator } from "./RoomIndicator";
+import { TrumpSprite } from "./TrumpSprite";
 import { KitchenRoom } from "./rooms/KitchenRoom";
 import { BathroomRoom } from "./rooms/BathroomRoom";
 import { BedroomRoom } from "./rooms/BedroomRoom";
@@ -131,6 +132,11 @@ export function GameScreen() {
         >
           <RoomContent />
         </div>
+      </div>
+
+      {/* Trump Sprite - always visible, floating above room content */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none">
+        <TrumpSprite />
       </div>
     </div>
   );
