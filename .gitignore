@@ -8,3 +8,5 @@ node_modules
 dist
 out
 *.log
+known_hosts
+*known_hosts*
