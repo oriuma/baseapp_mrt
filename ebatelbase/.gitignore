@@ -16,6 +16,7 @@
 # next.js
 /.next/
 /out/
+dist
 
 # production
 /build
@@ -25,6 +26,7 @@
 *.pem
 
 # debug
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -42,4 +44,7 @@ next-env.d.ts
 
 # local template copy (not part of pushed repo)
 _old_landing
+
+# archived copy of Snake mini app (kept locally, not deployed)
+_archive
 

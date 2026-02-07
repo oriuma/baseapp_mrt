@@ -1,6 +1,10 @@
 # Local template copy (not part of pushed repo)
 _old_landing
 
-# Dependencies and build at repo root (Vercel builds inside ebatelbase/)
+# Dependencies and build
 node_modules
 .next
+.vercel
+dist
+out
+*.log
