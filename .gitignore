@@ -1,12 +1,47 @@
-# Local template copy (not part of pushed repo)
-_old_landing
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Dependencies and build
-node_modules
-.next
-.vercel
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
 dist
-out
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
 *.log
-known_hosts
-*known_hosts*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Archive of old structure
+ebatelbase/
+DEPLOY_TRIGGER.txt
