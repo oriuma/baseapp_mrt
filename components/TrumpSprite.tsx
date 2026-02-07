@@ -18,9 +18,13 @@ export function TrumpSprite() {
     const hasRedStat = Object.values(stats).some((value) => value < 30);
     
     // Проверка недавнего выигрыша в трейдинге (последние 5 секунд)
+    // Если в type есть "PnL:" и положительное число, или type === "profit"
     const hasRecentWin = recentTrades.length > 0 && 
-      recentTrades[recentTrades.length - 1].profit > 0 &&
-      Date.now() - recentTrades[recentTrades.length - 1].timestamp < 5000;
+      (
+        recentTrades[0].type === "profit" ||
+        (recentTrades[0].type.startsWith("PnL:") && parseFloat(recentTrades[0].type.split(":")[1]) > 0)
+      ) &&
+      Date.now() - recentTrades[0].timestamp < 5000;
     
     return hasRedStat || hasRecentWin;
   };
