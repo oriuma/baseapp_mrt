@@ -46,7 +46,7 @@ export function TrumpSprite() {
         alt="Trump"
         width={64}
         height={80}
-        className="pixelated"
+        className="image-rendering-pixelated"
         priority
         unoptimized
       />
