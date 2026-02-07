@@ -1,57 +1,54 @@
 "use client";
 
-/**
- * Sprite-based pixel-art character (Mr. T).
- * Tries .png first; falls back to .svg if PNGs are not present.
- */
+import { useEffect, useState } from "react";
+import { useGameStore } from "@/lib/gameState";
+import Image from "next/image";
 
-import { useState } from "react";
+const FRAME_COUNT = 10;
+const ANIMATION_SPEED = 100; // ms per frame
 
-export type TrumpSpriteProps = {
-  mood: number;
-  cleanliness: number;
-  isSleeping: boolean;
-  isCleaning?: boolean;
-};
+export function TrumpSprite() {
+  const [currentFrame, setCurrentFrame] = useState(1);
+  const stats = useGameStore((s) => s.stats);
+  const recentTrades = useGameStore((s) => s.recentTrades);
 
-const SPRITES_BASE = "/sprites";
+  // Определяем, должен ли Трамп злиться
+  const isAngry = () => {
+    // Проверка красных показателей (< 30)
+    const hasRedStat = Object.values(stats).some((value) => value < 30);
+    
+    // Проверка недавнего выигрыша в трейдинге (последние 5 секунд)
+    const hasRecentWin = recentTrades.length > 0 && 
+      recentTrades[recentTrades.length - 1].profit > 0 &&
+      Date.now() - recentTrades[recentTrades.length - 1].timestamp < 5000;
+    
+    return hasRedStat || hasRecentWin;
+  };
 
-export function TrumpSprite({
-  mood,
-  cleanliness,
-  isSleeping,
-  isCleaning = false,
-}: TrumpSpriteProps) {
-  let spriteName = "trump_idle";
-  if (isSleeping) {
-    spriteName = "trump_sleep";
-  } else if (isCleaning) {
-    spriteName = "trump_happy";
-  } else if (cleanliness < 30) {
-    spriteName = "trump_dirty";
-  } else if (mood > 70) {
-    spriteName = "trump_happy";
-  } else if (mood < 30) {
-    spriteName = "trump_angry";
-  }
+  const animationType = isAngry() ? "angry" : "idle";
 
-  const [useSvg, setUseSvg] = useState(false);
-  const src = useSvg
-    ? `${SPRITES_BASE}/${spriteName}.svg`
-    : `${SPRITES_BASE}/${spriteName}.png`;
+  // Анимационный цикл
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentFrame((prev) => (prev % FRAME_COUNT) + 1);
+    }, ANIMATION_SPEED);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const frameNumber = currentFrame.toString().padStart(3, "0");
+  const spritePath = `/sprites/animations/trump_${animationType}/frame_${frameNumber}.png`;
 
   return (
-    <div className="w-full flex justify-center items-center flex-shrink-0">
-      <img
-        src={src}
-        alt="Mr. T"
-        width={160}
-        height={160}
-        className="image-pixelated w-40 h-40 object-contain"
-        style={{ imageRendering: "pixelated" }}
-        onError={() => {
-          if (!useSvg) setUseSvg(true);
-        }}
+    <div className="relative flex items-center justify-center">
+      <Image
+        src={spritePath}
+        alt="Trump"
+        width={64}
+        height={80}
+        className="pixelated"
+        priority
+        unoptimized
       />
     </div>
   );
