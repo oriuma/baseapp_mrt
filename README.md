@@ -1,76 +1,159 @@
-# My Trump
+# MyTrump 🎮
 
-A Tamagotchi-style browser game. Take care of **Mr. T** — feed him, clean him, let him sleep, have fun, and report your trading results. Mr. T is happier when you lose (liquidation / big loss) and less happy when you profit.
+A **Tamagotchi-style trading companion** game built as a Base Mini App. Take care of Mr. T while managing your trading emotions!
 
-This project is configured as a **Base Mini App** and can be published to the Base app via the Farcaster manifest.
+## 🎯 Game Features
 
-## Base Mini App
+- **6 Interactive Rooms**: Kitchen, Bathroom, Bedroom, Fun, Trading, Shop
+- **Character Care**: Feed, clean, sleep, and entertain Mr. T
+- **Trading System**: Report your trades and watch how they affect Mr. T's mood
+- **Cosmetics Shop**: Buy and equip items with TrumpCoins
+- **Daily Bonuses**: Log in daily to earn rewards
+- **Swipeable Interface**: Navigate between rooms with swipe gestures
+- **Persistent State**: Your progress is saved locally
 
-- **Manifest**: Served at `/.well-known/farcaster.json` (see [Base Mini App quickstart](https://docs.base.org/mini-apps/quickstart/create-new-miniapp)).
-- **Config**: `minikit.config.ts` at the project root defines the mini app name, description, icon, splash, tags, and `homeUrl` (the main game page). The manifest route imports this config and returns it as JSON.
-- **Account association**: The `accountAssociation` object in `minikit.config.ts` must be filled using the Base Build tool before publishing:
-  1. Deploy this app to Vercel. In the Vercel project: **Settings → Deployment Protection** → turn off "Vercel Authentication" so the manifest is publicly reachable.
-  2. Open [Base Build — Account association](https://www.base.dev/preview?tab=account).
-  3. Enter your app URL (e.g. `my-trump.vercel.app`) in **App URL** and click **Submit**.
-  4. Click **Verify** and complete the flow to generate `header`, `payload`, and `signature`.
-  5. Copy the `accountAssociation` object and paste it into `minikit.config.ts` (replace the empty strings).
-  6. Push to `main` so Vercel redeploys. Then use [base.dev/preview](https://base.dev/preview) to validate and publish.
+## 🚀 Quick Start
 
-Optional assets: add `public/screenshot-portrait.png` and `public/mytrump-icon.png` (e.g. 512×512) for store listing; the config currently falls back to `favicon.ico` for icon/splash/og.
+### Prerequisites
 
-## Tech Stack
+- Node.js 20.x or higher
+- npm or yarn
 
-- **Next.js** (App Router) + **TypeScript** + **Tailwind CSS**
-- **Zustand** for client-side game state
-- **localStorage** for persistence (no backend)
-
-## Getting Started
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/oriuma/baseapp_mrt.git
+cd baseapp_mrt
+
+# Install dependencies
 npm install
+
+# Run development server
 npm run dev
+
+# Open http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The game is mobile-first and works best on a phone or with DevTools device emulation.
-
-## Build & Run (Production)
+### Build for Production
 
 ```bash
 npm run build
 npm start
 ```
 
-Ensure the app builds with `npm run build` and runs with `npm start` before deploying.
+## 📁 Project Structure
 
-## Deploy on Vercel
+```
+baseapp_mrt/
+├── app/                 # Next.js 15 App Router
+├── components/          # React components
+│   └── rooms/          # Room-specific components
+├── lib/                # Business logic & state
+├── public/             # Static assets & sprites
+├── package.json
+├── tsconfig.json
+└── next.config.ts
+```
 
-1. Push the repo to GitHub (or connect another Git provider).
-2. In [Vercel](https://vercel.com), import the project and deploy.
-3. No environment variables are required for the MVP.
-4. Build command: `npm run build` (default). Output directory: `.next` (default).
+See [MIGRATION.md](./MIGRATION.md) for detailed structure information.
 
-The app is fully client-side; all game state and persistence use `localStorage`, so there is no server-side dependency that could break on Vercel.
+## 🎮 Game Mechanics
 
-## Game Features (MVP)
+### Stats System
 
-- **Stats**: Mood, Hunger, Energy, Cleanliness, Respect (0–100). They decay over time (tick every ~8s).
-- **Actions**: Feed (multiple foods), Clean (shower), Sleep (energy recovery + dimmed background), Fun (e.g. "Pump the Market"), Trading (report liquidation / profit / small loss or enter PnL).
-- **Trading**: Liquidation / Big Loss → mood up; Profit / Win → mood down. Optional numeric PnL input. Recent trades log (last 10).
-- **TrumpCoins**: Earn from daily login bonus and from keeping all stats in the green zone. Spend in the Shop.
-- **Shop**: Cosmetic items (hats, suits, backgrounds). Buy and equip; state persisted in localStorage.
+- **Mood**: Affected by trading results and entertainment
+- **Hunger**: Decreases over time, restore by feeding
+- **Energy**: Depletes with activity, restore by sleeping
+- **Cleanliness**: Gets dirty over time, clean in bathroom
+- **Respect**: Earned through good stats and trading
 
-## Project Structure
+### Trading Logic
 
-- `app/` — layout, page, globals.css; `app/.well-known/farcaster.json/route.ts` (manifest); `app/api/webhook/route.ts` (placeholder)
-- `minikit.config.ts` — Base Mini App / Farcaster config (manifest source)
-- `components/` — GameScreen, StatusBar, HeaderBar, ActionsPanel, TradingPanel, ShopPanel, Modal, PixelButton, PixelCard
-- `lib/` — gameState (Zustand), tradingLogic, persistence, constants
-- `public/sprites/` — placeholder SVGs for Mr. T and room (replace with PNG pixel art if desired)
+Mr. T has a unique personality:
+- **Losses make him happy** 😊 (he loves when you lose money)
+- **Profits make him grumpy** 😠 (he hates when you win)
+- Track your trading PnL and see mood changes
 
-## Extending (e.g. Real Trading APIs)
+### TrumpCoins Economy
 
-Trading logic lives in `lib/tradingLogic.ts` with TODO comments. To plug in real APIs (Polymarket, CEX, etc.):
+- Earn coins by maintaining good stats
+- Daily login bonuses
+- Spend coins in the Shop for cosmetics
 
-- Subscribe to PnL / position updates in a client component or hook.
-- Call `markTrade(eventType, pnl)` from the game store with the appropriate event or numeric PnL.
-- `getTradeResult()` and `getTradeResultFromPnL()` already map events/PnL to mood and respect deltas.
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **State Management**: Zustand
+- **Persistence**: LocalStorage
+- **Blockchain**: Base (Coinbase Smart Wallet)
+- **Deployment**: Vercel
+
+## 🔗 Base Mini App Integration
+
+This project follows [Base Mini App standards](https://docs.base.org/mini-apps):
+
+- Farcaster Frame manifest at `/.well-known/farcaster.json`
+- MiniKit SDK integration
+- Coinbase Smart Wallet support
+- Webhook handlers for on-chain events
+
+## 📦 Deployment
+
+### Vercel (Recommended)
+
+1. Push code to GitHub
+2. Import project to Vercel
+3. Configure settings:
+   - Root Directory: `/` 
+   - Build Command: `npm run build`
+   - Node Version: 20.x
+4. Deploy!
+
+### Manual Deployment
+
+```bash
+npm run build
+# Deploy the .next folder to your hosting
+```
+
+## 🎨 Customization
+
+### Add New Room
+
+1. Create room component in `components/rooms/`
+2. Add room type to `lib/rooms.ts`
+3. Update `ROOMS` array
+4. Create background sprite in `public/sprites/`
+
+### Modify Game Balance
+
+Edit values in `lib/constants.ts`:
+- Food item effects
+- Stat decay rates
+- Coin rewards
+- Shop item prices
+
+## 📄 License
+
+MIT License - feel free to use this project as a template for your own Base Mini Apps!
+
+## 🙏 Credits
+
+- Built with [Base Mini Apps](https://base.org/mini-apps)
+- Inspired by Tamagotchi
+- Character sprite design: Simple SVG placeholders
+
+## 🐛 Issues & Contributions
+
+Found a bug? Want to contribute?
+
+- Open an issue on GitHub
+- Submit a pull request
+- Share your feedback!
+
+---
+
+**Have fun taking care of Mr. T! 🎮**
